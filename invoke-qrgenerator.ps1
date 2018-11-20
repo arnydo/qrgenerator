@@ -15,14 +15,20 @@ function get-qrcodeurl {
 
     [cmdletbinding()]
     param (
-        $builder
+        [string]$builder = $null,
+        [string]$title = $null,
+        [string]$issuer = $null
     )
 
     if ($builder -eq $null) {
         $builder = new-qrsecret
     }
+    
+    if ($issuer -ne $null){
+        $issuer = "&" + $issuer
+    }
 
-    $googleUrlLabel = "otpauth://totp/screenconnect?secret=" + $builder;
+    $googleUrlLabel = "otpauth://totp/$($title)?secret=" + $builder + $issuer;
 
     $EncodedURL = [System.Web.HttpUtility]::UrlEncode($googleUrlLabel)
 
